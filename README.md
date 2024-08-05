@@ -1,2 +1,2 @@
 # bookstore
-BookStore APP
+BookStore APP in Django Rest Framework
