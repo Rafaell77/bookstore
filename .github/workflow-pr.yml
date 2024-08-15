@@ -1,0 +1,60 @@
+name: Pull Request Workflow
+
+on:
+  pull_request:
+    branches:
+      - main  # Ou outro branch de destino para o qual você está abrindo o PR
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '14'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run tests
+      run: npm test
+
+    - name: Lint code
+      run: npm run lint
+
+    - name: Build project
+      run: npm run build
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: build
+        path: ./build
+
+  review:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Run code analysis
+      run: |
+        # Exemplo de comando para análise de código
+        echo "Running code analysis..."
+
+    - name: Notify about the PR
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const pr = context.payload.pull_request;
+          const message = `Pull Request #${pr.number} is being reviewed.`;
+          console.log(message);
+          // Optional: S
+
